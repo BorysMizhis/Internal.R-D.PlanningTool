@@ -1,0 +1,33 @@
+﻿@page 
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    
+    <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in @Model.employees)
+        {
+            <tr>
+                <td scope="row">@employee.Name</td>
+            </tr>
+        }        
+    </tbody>
+    </table>
+    
+    <div>@Model.Message</div>
+    <form method="post">
+        <input type="submit" asp-page-handler="AddEmployee" class="btn btn-primary" value="AddEmployee"/>
+    </form>
+    <form method="post">
+        <input type="submit" asp-page-handler="TimeButton" class="btn btn-primary" value="TimeButton" />
+    </form>
+
+</div>
