@@ -5,20 +5,80 @@
 }
 
 <div class="text-center">
-    
-    <table class="table">
+    <br />
+    <table class="table table-striped">
     <thead>
         <tr>
             <th scope="col">Name</th>
+        
+        @for(int i=0; i<12; i++)
+        {
+            Model.date = DateTime.Now.AddMonths(i);
+            <th scope="col">@Model.date.Month / @Model.date.Year</th>
+        }
         </tr>
     </thead>
     <tbody>
         @foreach (var employee in @Model.employees)
         {
             <tr>
-                <td scope="row">@employee.Name</td>
+                <th scope="row" class="text-start">@employee.Name</th>
+            
+            @for(int i=0; i<12; i++)
+            {
+                Model.date = DateTime.Now.AddMonths(i);
+                <td scope="col">
+                    @{
+                        int? planned = employee.GetPlannedCapacity(Model.date.Month, Model.date.Year);
+                        int? available = employee.GetAvailableCapacity(Model.date.Month, Model.date.Year);
+
+                        if(planned > available) {
+                            <span class="text-danger">@planned / @available</span>
+                        } else {
+                            <span class="text-success">@planned / @available</span>
+                        }
+                    }
+                    
+                </td>
+            }
             </tr>
+        }   
+        <tr>
+            <td colspan="13"><br /></td>
+        </tr>     
+    </tbody>
+    <thead>
+        <tr>
+            <th scope="col">Version & Feature</th>
+        
+        @for(int i=0; i<12; i++)
+        {
+            <th scope="col"></th>
+        }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var feature in @Model.features)
+        {
+            <tr>
+                <th scope="row" class="text-start">@feature.Name</th>
+                <th scope="col" colspan="12"></th>
+            </tr>
+            @foreach (var employee in feature.Employees)
+            {
+                <tr>
+                    <td scope="row" class="text-end">@employee.Name</td>
+                
+                @for(int i=0; i<12; i++)
+                {
+                    Model.date = DateTime.Now.AddMonths(i);
+                    <td scope="col">@feature.GetPlanningValue(employee.Id, Model.date.Month, Model.date.Year)</td>
+                }
+                </tr>
+            }  
         }        
+
+         
     </tbody>
     </table>
     
@@ -27,7 +87,15 @@
         <input type="submit" asp-page-handler="AddEmployee" class="btn btn-primary" value="AddEmployee"/>
     </form>
     <form method="post">
+        <input type="submit" asp-page-handler="AddChapter" class="btn btn-primary" value="Add Chapter" />
+    </form>
+    <form method="post">
+        <input type="submit" asp-page-handler="AddFeature" class="btn btn-primary" value="Add Feature" />
+    </form>
+    <form method="post">
         <input type="submit" asp-page-handler="TimeButton" class="btn btn-primary" value="TimeButton" />
     </form>
+
+    
 
 </div>

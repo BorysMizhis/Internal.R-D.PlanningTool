@@ -6,11 +6,14 @@ using PlanningTool.Models;
 namespace PlanningTool.DBInterface;
 
 public class DatabaseInterface: DbContext
-{
-    //public DbSet<Feature> Features { set; get; }
-        
+{        
     public string DbPath { get; } = "Database.db";
+    public string? Sql { set; get; }
+    public SqliteConnection Connection;
 
+    public DatabaseInterface(){
+        Connection = new SqliteConnection($"Data Source={DbPath}");
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionbuilder)
         => optionbuilder.UseSqlite($"Data Source={DbPath}");    
 
@@ -21,11 +24,11 @@ public class DatabaseInterface: DbContext
         using var connection = new SqliteConnection($"Data Source={DbPath}");
         connection.Open();
 
-        sql = $"CREATE TABLE IF NOT EXISTS {nameof(CapacityCorrection)} ({nameof(CapacityCorrection.Id)} INTEGER PRIMARY KEY, {nameof(CapacityCorrection.EmployeeId)} INTEGER NOT NULL, {nameof(CapacityCorrection.CorrectionYear)} INTEGER NOT NULL, {nameof(CapacityCorrection.CorrectionMonth)} INTEGER NOT NULL, {nameof(CapacityCorrection.CorrectionValue)} INTEGER NOT NULL)";
+        sql = $"CREATE TABLE IF NOT EXISTS {nameof(CapacityCorrection)} ({nameof(CapacityCorrection.Id)} INTEGER PRIMARY KEY, {nameof(CapacityCorrection.EmployeeId)} INTEGER NOT NULL, {nameof(CapacityCorrection.Year)} INTEGER NOT NULL, {nameof(CapacityCorrection.Month)} INTEGER NOT NULL, {nameof(CapacityCorrection.Value)} INTEGER NOT NULL)";
         command = new SqliteCommand(sql, connection);
         command.ExecuteNonQuery();
 
-        sql = $"CREATE TABLE IF NOT EXISTS {nameof(Chapter)} ({nameof(Chapter.Id)} INTEGER PRIMARY KEY, {nameof(Chapter.ChapterName)} TEXT NOT NULL)";
+        sql = $"CREATE TABLE IF NOT EXISTS {nameof(Chapter)} ({nameof(Chapter.Id)} INTEGER PRIMARY KEY, {nameof(Chapter.Name)} TEXT NOT NULL)";
         command = new SqliteCommand(sql, connection);
         command.ExecuteNonQuery();
 
@@ -41,25 +44,12 @@ public class DatabaseInterface: DbContext
         command = new SqliteCommand(sql, connection);
         command.ExecuteNonQuery();
 
-        sql = $"CREATE TABLE IF NOT EXISTS {nameof(Relations)} ({nameof(Relations.Id)} INTEGER PRIMARY KEY, {nameof(Relations.ChapterId)} INTEGER, {nameof(Relations.EmployeeId)} INTEGER, {nameof(Relations.FeatureId)} INTEGER, {nameof(Relations.ReleaseVersionId)} INTEGER)";
+        sql = $"CREATE TABLE IF NOT EXISTS {nameof(Relation)} ({nameof(Relation.Id)} INTEGER PRIMARY KEY, {nameof(Relation.ChapterId)} INTEGER, {nameof(Relation.EmployeeId)} INTEGER, {nameof(Relation.FeatureId)} INTEGER, {nameof(Relation.ReleaseVersionId)} INTEGER)";
         command = new SqliteCommand(sql, connection);
         command.ExecuteNonQuery();
 
         connection.Close();
         Console.WriteLine("Tables created successfully.");
-    }
-
-    public void AddEntry(){
-
-        var sql = @"INSERT INTO authors (first_name,last_name) VALUES( 'test12', 'value22');";
-
-        using var connection = new SqliteConnection($"Data Source={DbPath}");
-        connection.Open();
-
-        using var command = new SqliteCommand(sql, connection);
-        command.ExecuteNonQuery();
-
-        Console.WriteLine("Entry 'authors' added successfully.");
     }
 
     public void DropTable(){
@@ -68,31 +58,15 @@ public class DatabaseInterface: DbContext
         using var connection = new SqliteConnection($"Data Source={DbPath}");
         connection.Open();
 
-        sql = $"DROP TABLE {nameof(CapacityCorrection)};";
-        command = new SqliteCommand(sql, connection);
-        command.ExecuteNonQuery();
-
         sql = $"DROP TABLE {nameof(Chapter)};";
         command = new SqliteCommand(sql, connection);
         command.ExecuteNonQuery();
 
+        /*sql = $"DROP TABLE {nameof(Chapter)};";
+        command = new SqliteCommand(sql, connection);
+        command.ExecuteNonQuery();*/
+
         Console.WriteLine("Tables dropped!.");
         connection.Close();
-    }
-
-    public void ReadTable()
-    {
-        /*await using var db = new DatabaseInterface();
-
-        Console.WriteLine($"DB Path: {db.DbPath}");
-
-        var result = 
-        from feature in db.Authors
-        select feature;
-
-        await foreach(var a in result.AsAsyncEnumerable())
-        {
-            Console.WriteLine(a.first_name);
-        }*/
     }
 }

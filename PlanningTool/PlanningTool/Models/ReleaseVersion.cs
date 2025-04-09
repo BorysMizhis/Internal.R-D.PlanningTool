@@ -2,8 +2,10 @@ namespace PlanningTool.Models;
 
 public class ReleaseVersion
 {
-    public required int Id { set; get; }
-    public required String Name { set; get; }
-    public required int State { set; get; }
+    public int Id { set; get; } = 0;
+    public String Name { set; get; } = string.Empty;
+    public int State { set; get; } = 0;
+
+    public List<Feature>? Features { set; get; }
 }
 

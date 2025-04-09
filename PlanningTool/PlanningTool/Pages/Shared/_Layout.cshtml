@@ -12,15 +12,20 @@
 </head>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <div class="header border-bottom">
+         <div class="container">
+            <p class="text-secondary fs-2">R&D PlanningTool</p>
+        </div>
+    </div>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer">
         <div class="container">
-            &copy; 2025 - PlanningTool - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            <p class="text-secondary">&copy; 2025 - Swyx R&D PlanningTool by <a href="https://enreach.de" target="_blank">Enreach GmbH</a></p>            
         </div>
     </footer>
 

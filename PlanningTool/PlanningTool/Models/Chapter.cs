@@ -4,6 +4,8 @@ namespace PlanningTool.Models;
 
 public class Chapter
 {
-    public required int Id { set; get; }
-    public required String ChapterName { set; get; }
+    public int Id { set; get; } = 0;
+    public String Name { set; get; } = string.Empty;
+
+    public List<Employee>? Employees { set; get;}
 }
